@@ -27,13 +27,51 @@ body {
   width: 100%;
 }
 
-@theme {
+:root {
   --font-heading: "Outfit", sans-serif;
+  --font-display: "Inter", sans-serif;
+  
+  /* Enhanced Color Palette */
+  --color-sky-50: #f0f9ff;
+  --color-sky-100: #e0f2fe;
+  --color-sky-200: #bae6fd;
+  --color-sky-300: #7dd3fc;
+  --color-sky-400: #38bdf8;
+  --color-sky-500: #0ea5e9;
+  --color-sky-600: #0284c7;
+  --color-sky-700: #0369a1;
+  --color-sky-800: #075985;
+  --color-sky-900: #0c4a6e;
+  
+  --color-sunset-50: #fef7ed;
+  --color-sunset-100: #fed7aa;
+  --color-sunset-200: #fdba74;
+  --color-sunset-300: #fb923c;
+  --color-sunset-400: #f97316;
+  --color-sunset-500: #ea580c;
+  --color-sunset-600: #dc2626;
+  --color-sunset-700: #c2410c;
+  --color-sunset-800: #9a3412;
+  --color-sunset-900: #7c2d12;
+  
+  --color-night-50: #f8fafc;
+  --color-night-100: #f1f5f9;
+  --color-night-200: #e2e8f0;
+  --color-night-300: #cbd5e1;
+  --color-night-400: #94a3b8;
+  --color-night-500: #64748b;
+  --color-night-600: #475569;
+  --color-night-700: #334155;
+  --color-night-800: #1e293b;
+  --color-night-900: #0f172a;
+  
   --color-sky-main: #38bdf8;
   --color-sky-dark: #0369a1;
+  --color-sunset-main: #f97316;
+  --color-night-main: #0f172a;
 }
 
-/* Glassmorphism utility */
+/* Enhanced Glassmorphism Effects */
 .glass {
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(16px);
@@ -47,6 +85,65 @@ body {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 40px 0 rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Modern Button Styles */
+.btn-primary {
+  background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(56, 189, 248, 0.4);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
 }
 
 /* Custom Animations */
