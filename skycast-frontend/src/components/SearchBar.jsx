@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Search, MapPin, Star } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -29,9 +29,9 @@ export default function SearchBar({ onSearch, isLoading }) {
                     onChange={(e) => setQuery(e.target.value)}
                     placeholder="Search for a city (e.g. Tokyo, London)..."
                     className={cn(
-                        "block w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-2xl shadow-xl",
+                        "block w-full pl-12 pr-4 py-4 glass-card border border-white/20 rounded-2xl shadow-xl",
                         "text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:bg-white/20",
-                        "backdrop-blur-md transition-all duration-300",
+                        "backdrop-blur-md transition-all duration-300 hover:border-white/30",
                         isLoading && "opacity-50 cursor-not-allowed"
                     )}
                     disabled={isLoading}
@@ -40,7 +40,7 @@ export default function SearchBar({ onSearch, isLoading }) {
                     type="submit"
                     disabled={isLoading || !query.trim()}
                     className={cn(
-                        "absolute right-2.5 bottom-2.5 px-6 py-1.5 bg-sky-500 hover:bg-sky-600 rounded-xl",
+                        "absolute right-2.5 bottom-2.5 px-6 py-1.5 btn-primary rounded-xl",
                         "text-white font-medium shadow-lg transition-all active:scale-95 disabled:opacity-50",
                         "disabled:cursor-not-allowed disabled:active:scale-100"
                     )}
