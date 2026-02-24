@@ -9,7 +9,7 @@ export default function CurrentWeather({ data }) {
     const iconUrl = `https://openweathermap.org/img/wn/${condition.icon}@4x.png`;
 
     return (
-        <div className="w-full max-w-4xl mx-auto mt-8 glass rounded-3xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
+        <div className="w-full max-w-4xl mx-auto mt-8 glass-card rounded-3xl overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-4 duration-700">
             <div className="p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8">
                 {/* Left side: City & Temp */}
                 <div className="flex-1 text-center md:text-left">
