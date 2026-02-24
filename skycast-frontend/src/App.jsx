@@ -107,15 +107,32 @@ function App() {
 
 function getBackgroundClass(condition) {
   const c = condition?.toLowerCase();
-  if (!c) return 'bg-[#0f172a]'; // Default dark navy
+  if (!c) return 'bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900';
 
-  if (c.includes('clear') || c.includes('sky')) return 'bg-gradient-to-br from-sky-400 via-sky-600 to-sky-800';
-  if (c.includes('cloud')) return 'bg-gradient-to-br from-slate-400 via-slate-600 to-slate-800';
-  if (c.includes('rain') || c.includes('drizzle')) return 'bg-gradient-to-br from-indigo-400 via-indigo-600 to-indigo-900';
-  if (c.includes('thunder')) return 'bg-gradient-to-br from-purple-700 via-indigo-900 to-black';
-  if (c.includes('snow')) return 'bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500';
+  // Enhanced weather-based backgrounds with better gradients
+  if (c.includes('clear') || c.includes('sky')) {
+    return 'bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600';
+  }
+  if (c.includes('cloud')) {
+    return 'bg-gradient-to-br from-slate-400 via-gray-500 to-slate-600';
+  }
+  if (c.includes('rain') || c.includes('drizzle')) {
+    return 'bg-gradient-to-br from-indigo-500 via-blue-600 to-slate-700';
+  }
+  if (c.includes('thunder') || c.includes('storm')) {
+    return 'bg-gradient-to-br from-purple-900 via-indigo-900 to-black';
+  }
+  if (c.includes('snow')) {
+    return 'bg-gradient-to-br from-blue-100 via-gray-200 to-slate-300';
+  }
+  if (c.includes('mist') || c.includes('fog')) {
+    return 'bg-gradient-to-br from-gray-300 via-slate-400 to-gray-500';
+  }
+  if (c.includes('wind')) {
+    return 'bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600';
+  }
 
-  return 'bg-gradient-to-br from-sky-900 via-slate-900 to-black';
+  return 'bg-gradient-to-br from-sky-900 via-slate-800 to-indigo-900';
 }
 
 export default App;
