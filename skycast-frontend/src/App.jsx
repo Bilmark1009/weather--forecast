@@ -1,0 +1,121 @@
+import { useState, useEffect } from 'react';
+import SearchBar from './components/SearchBar';
+import CurrentWeather from './components/CurrentWeather';
+import ForecastRow from './components/ForecastRow';
+import FeaturedCities from './components/FeaturedCities';
+import FavoritesSidebar from './components/FavoritesSidebar';
+import FeedbackModal from './components/FeedbackModal';
+import { LoadingSkeleton, ErrorMessage } from './components/States';
+import { useWeather } from './hooks/useWeather';
+import { useFavorites } from './hooks/useFavorites';
+import { Star, MessageSquare } from 'lucide-react';
+
+function App() {
+  const { current, forecast, loading, error, fetchWeather } = useWeather();
+  const { toggleFavorite, isFavorite } = useFavorites();
+  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [isFeedbackOpen, setFeedbackOpen] = useState(false);
+
+  // Initialize with a default city or from geolocation
+  useEffect(() => {
+    fetchWeather('London');
+  }, [fetchWeather]);
+
+  const handleFavoriteClick = async () => {
+    if (current) {
+      await toggleFavorite(current.name, current.sys.country);
+    }
+  };
+
+  const bgClass = getBackgroundClass(current?.weather[0]?.main);
+
+  return (
+    <div className={`min-h-screen transition-colors duration-1000 ${bgClass} text-white selection:bg-sky-500/30`}>
+      {/* Navigation / Header */}
+      <header className="p-4 md:p-8 flex items-center justify-between max-w-7xl mx-auto">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
+            <span className="text-2xl font-black italic">S</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight hidden sm:block">SkyCast</h1>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setFeedbackOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-xl transition-all text-gray-300 hover:text-white"
+          >
+            <MessageSquare size={20} />
+            <span className="hidden md:inline font-medium">Feedback</span>
+          </button>
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="p-3 bg-white/10 hover:bg-white/20 rounded-xl transition-all shadow-xl backdrop-blur-md"
+          >
+            <Star size={24} className="text-sky-400" />
+          </button>
+        </div>
+      </header>
+
+      <main className="px-4 pb-20 max-w-7xl mx-auto">
+        <div className="mt-8 mb-12">
+          <SearchBar onSearch={fetchWeather} isLoading={loading} />
+        </div>
+
+        {loading && <LoadingSkeleton />}
+        {error && <ErrorMessage message={error} />}
+
+        {current && !loading && (
+          <div className="relative">
+            {/* Favorite toggle button floating on CurrentWeather */}
+            <button
+              onClick={handleFavoriteClick}
+              className={`absolute top-12 right-12 z-20 p-3 rounded-full transition-all hover:scale-110 active:scale-90 ${isFavorite(current.name)
+                  ? 'bg-sky-500 text-white shadow-lg shadow-sky-500/40'
+                  : 'bg-white/10 text-white hover:bg-white/20'
+                }`}
+            >
+              <Star size={24} fill={isFavorite(current.name) ? "currentColor" : "none"} />
+            </button>
+
+            <CurrentWeather data={current} />
+            <ForecastRow forecast={forecast} />
+          </div>
+        )}
+
+        {/* Show featured cities if no active search or after a search as exploration */}
+        <FeaturedCities onSelectCity={fetchWeather} />
+      </main>
+
+      <FavoritesSidebar
+        isOpen={isSidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onSelectCity={fetchWeather}
+      />
+
+      <FeedbackModal
+        isOpen={isFeedbackOpen}
+        onClose={() => setFeedbackOpen(false)}
+      />
+
+      <footer className="py-8 text-center text-gray-500 text-sm border-t border-white/5">
+        <p>© 2026 SkyCast Weather Application. Powered by OpenWeatherMap.</p>
+      </footer>
+    </div>
+  );
+}
+
+function getBackgroundClass(condition) {
+  const c = condition?.toLowerCase();
+  if (!c) return 'bg-[#0f172a]'; // Default dark navy
+
+  if (c.includes('clear') || c.includes('sky')) return 'bg-gradient-to-br from-sky-400 via-sky-600 to-sky-800';
+  if (c.includes('cloud')) return 'bg-gradient-to-br from-slate-400 via-slate-600 to-slate-800';
+  if (c.includes('rain') || c.includes('drizzle')) return 'bg-gradient-to-br from-indigo-400 via-indigo-600 to-indigo-900';
+  if (c.includes('thunder')) return 'bg-gradient-to-br from-purple-700 via-indigo-900 to-black';
+  if (c.includes('snow')) return 'bg-gradient-to-br from-blue-100 via-blue-300 to-blue-500';
+
+  return 'bg-gradient-to-br from-sky-900 via-slate-900 to-black';
+}
+
+export default App;
