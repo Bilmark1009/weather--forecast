@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, MapPin, Star } from 'lucide-react';
+import { Search, MapPin, Star, Loader2 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -42,10 +42,17 @@ export default function SearchBar({ onSearch, isLoading }) {
                     className={cn(
                         "absolute right-2.5 bottom-2.5 px-6 py-1.5 btn-primary rounded-xl",
                         "text-white font-medium shadow-lg transition-all active:scale-95 disabled:opacity-50",
-                        "disabled:cursor-not-allowed disabled:active:scale-100"
+                        "disabled:cursor-not-allowed disabled:active:scale-100 flex items-center gap-2"
                     )}
                 >
-                    {isLoading ? '...' : 'Search'}
+                    {isLoading ? (
+                        <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Loading...
+                        </>
+                    ) : (
+                        'Search'
+                    )}
                 </button>
             </form>
         </div>

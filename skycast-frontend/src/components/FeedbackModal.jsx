@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Send, AlertCircle, CheckCircle2 } from 'lucide-react';
-import { submitFeedback } from '../services/api';
+import { feedbackService } from '../services/api';
 
 export default function FeedbackModal({ isOpen, onClose }) {
     const [formData, setFormData] = useState({
@@ -21,11 +21,12 @@ export default function FeedbackModal({ isOpen, onClose }) {
         setStatus(null);
 
         try {
-            await submitFeedback(formData);
+            await feedbackService.submit(formData);
             setStatus('success');
             setFormData({ name: '', email: '', type: 'feedback', subject: '', message: '' });
             setTimeout(() => { onClose(); setStatus(null); }, 2000);
         } catch (err) {
+            console.error('Feedback submission error:', err);
             setStatus('error');
         } finally {
             setLoading(false);

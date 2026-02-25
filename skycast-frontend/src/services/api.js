@@ -29,11 +29,8 @@ export const cityService = {
 };
 
 export const feedbackService = {
-  submit: (data) => api.get('/feedback', data), // Wait, should be POST
+  submit: (data) => api.post('/feedback', data),
 };
-
-// Fixing feedbackService.submit to use POST
-export const submitFeedback = (data) => api.post('/feedback', data);
 
 export const favoriteService = {
   getAll: () => api.get('/favorites'),
