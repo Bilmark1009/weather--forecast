@@ -1,5 +1,6 @@
 import { MapPin, Wind, Droplets, Thermometer, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
+import LazyImage from './LazyImage';
 
 export default function CurrentWeather({ data }) {
     if (!data) return null;
@@ -43,7 +44,7 @@ export default function CurrentWeather({ data }) {
                 {/* Center/Right: Icon */}
                 <div className="flex-shrink-0 relative">
                     <div className="absolute inset-0 bg-sky-400/20 blur-3xl rounded-full animate-pulse"></div>
-                    <img
+                    <LazyImage
                         src={iconUrl}
                         alt={condition.description}
                         className="w-48 h-48 md:w-64 md:h-64 relative z-10 drop-shadow-2xl"

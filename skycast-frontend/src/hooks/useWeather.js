@@ -1,19 +1,26 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { weatherService } from '../services/api';
-import { cacheUtils } from '../utils/cache';
+import useWeatherCache from './useWeatherCache';
 
 export function useWeather() {
     const [current, setCurrent] = useState(null);
     const [forecast, setForecast] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const { get, set, clear, cleanup } = useWeatherCache();
+
+    // Cleanup expired cache entries periodically
+    useEffect(() => {
+        const interval = setInterval(cleanup, 60000); // Every minute
+        return () => clearInterval(interval);
+    }, [cleanup]);
 
     const fetchWeather = useCallback(async (city) => {
         setLoading(true);
         setError(null);
 
         // Check cache first
-        const cachedData = cacheUtils.get(city);
+        const cachedData = get(city);
         if (cachedData) {
             setCurrent(cachedData.current);
             setForecast(cachedData.forecast);
@@ -33,7 +40,7 @@ export function useWeather() {
             };
 
             // Store in cache
-            cacheUtils.set(city, weatherData);
+            set(city, weatherData);
 
             setCurrent(weatherData.current);
             setForecast(weatherData.forecast);
@@ -45,7 +52,7 @@ export function useWeather() {
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [get, set]);
 
-    return { current, forecast, loading, error, fetchWeather, clearCache: cacheUtils.clear };
+    return { current, forecast, loading, error, fetchWeather, clearCache: clear };
 }
