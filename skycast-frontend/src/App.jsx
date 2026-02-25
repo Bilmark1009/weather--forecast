@@ -5,6 +5,7 @@ import ForecastRow from './components/ForecastRow';
 import FeaturedCities from './components/FeaturedCities';
 import FavoritesSidebar from './components/FavoritesSidebar';
 import FeedbackModal from './components/FeedbackModal';
+import WeatherAlerts from './components/WeatherAlerts';
 import { LoadingSkeleton, ErrorMessage } from './components/States';
 import { useWeather } from './hooks/useWeather';
 import { useFavorites } from './hooks/useFavorites';
@@ -58,6 +59,7 @@ function App() {
       </header>
 
       <main className="px-4 pb-20 max-w-7xl mx-auto">
+        <WeatherAlerts weatherData={current} />
         <div className="mt-8 mb-12">
           <SearchBar onSearch={fetchWeather} isLoading={loading} />
         </div>
