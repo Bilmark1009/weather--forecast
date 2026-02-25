@@ -6,6 +6,7 @@ import FeaturedCities from './components/FeaturedCities';
 import FavoritesSidebar from './components/FavoritesSidebar';
 import FeedbackModal from './components/FeedbackModal';
 import WeatherAlerts from './components/WeatherAlerts';
+import ErrorBoundary from './components/ErrorBoundary';
 import { LoadingSkeleton, ErrorMessage } from './components/States';
 import { useWeather } from './hooks/useWeather';
 import { useFavorites } from './hooks/useFavorites';
@@ -31,7 +32,8 @@ function App() {
   const bgClass = getBackgroundClass(current?.weather[0]?.main);
 
   return (
-    <div className={`min-h-screen transition-colors duration-1000 ${bgClass} text-white selection:bg-sky-500/30`}>
+    <ErrorBoundary>
+      <div className={`min-h-screen transition-colors duration-1000 ${bgClass} text-white selection:bg-sky-500/30`}>
       {/* Navigation / Header */}
       <header className="p-4 md:p-8 flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
@@ -104,6 +106,7 @@ function App() {
         <p>© 2026 SkyCast Weather Application. Powered by OpenWeatherMap.</p>
       </footer>
     </div>
+    </ErrorBoundary>
   );
 }
 

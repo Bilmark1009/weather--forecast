@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { weatherService } from '../services/api';
 import useWeatherCache from './useWeatherCache';
+import useRetry from './useRetry';
 
 export function useWeather() {
     const [current, setCurrent] = useState(null);
@@ -8,6 +9,7 @@ export function useWeather() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const { get, set, clear, cleanup } = useWeatherCache();
+    const { execute, attempts } = useRetry(3, 1000);
 
     // Cleanup expired cache entries periodically
     useEffect(() => {
@@ -29,10 +31,12 @@ export function useWeather() {
         }
 
         try {
-            const [currRes, foreRes] = await Promise.all([
-                weatherService.getCurrent(city),
-                weatherService.getForecast(city)
-            ]);
+            const [currRes, foreRes] = await execute(
+                async () => Promise.all([
+                    weatherService.getCurrent(city),
+                    weatherService.getForecast(city)
+                ])
+            );
             
             const weatherData = {
                 current: currRes.data,
@@ -46,13 +50,18 @@ export function useWeather() {
             setForecast(weatherData.forecast);
         } catch (err) {
             console.error(err);
-            setError(err.response?.data?.error || 'Failed to fetch weather data.');
+            const errorMessage = err.response?.data?.error || 'Failed to fetch weather data';
+            if (attempts > 1) {
+                setError(`${errorMessage} (Attempt ${attempts}/3)`);
+            } else {
+                setError(errorMessage);
+            }
             setCurrent(null);
             setForecast([]);
         } finally {
             setLoading(false);
         }
-    }, [get, set]);
+    }, [get, set, execute, attempts]);
 
     return { current, forecast, loading, error, fetchWeather, clearCache: clear };
 }
