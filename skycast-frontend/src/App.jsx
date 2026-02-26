@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import SearchBar from './components/SearchBar';
 import CurrentWeather from './components/CurrentWeather';
 import ForecastRow from './components/ForecastRow';
+import WeatherHistory from './components/WeatherHistory';
 import FeaturedCities from './components/FeaturedCities';
 import FavoritesSidebar from './components/FavoritesSidebar';
 import FeedbackModal from './components/FeedbackModal';
@@ -94,6 +95,7 @@ function App() {
 
             <CurrentWeather data={current} />
             <ForecastRow forecast={forecast} />
+            <WeatherHistory forecast={forecast} />
           </div>
         )}
 
