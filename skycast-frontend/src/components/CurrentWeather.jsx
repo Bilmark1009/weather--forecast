@@ -1,6 +1,7 @@
 import { MapPin, Wind, Droplets, Thermometer, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import LazyImage from './LazyImage';
+import SunriseSunset from './SunriseSunset';
 import { useTemperatureUnit } from '../hooks/useTemperatureUnit';
 
 export default function CurrentWeather({ data }) {
@@ -54,12 +55,16 @@ export default function CurrentWeather({ data }) {
                     />
                 </div>
 
-                {/* Right side: Details Grid */}
-                <div className="grid grid-cols-2 gap-4 w-full md:w-72">
-                    <DetailCard icon={<Wind className="text-sky-400" />} label="Wind" value={`${wind.speed} m/s`} />
-                    <DetailCard icon={<Droplets className="text-blue-400" />} label="Humidity" value={`${main.humidity}%`} />
-                    <DetailCard icon={<Thermometer className="text-orange-400" />} label="Feels Like" value={`${convertTemp(main.feels_like)}°`} />
-                    <DetailCard icon={<Calendar className="text-purple-400" />} label="Pressure" value={`${main.pressure} hPa`} />
+                {/* Right side: Details */}
+                <div className="space-y-4 w-full md:w-72">
+                    <div className="grid grid-cols-2 gap-4">
+                        <DetailCard icon={<Wind className="text-sky-400" />} label="Wind" value={`${wind.speed} m/s`} />
+                        <DetailCard icon={<Droplets className="text-blue-400" />} label="Humidity" value={`${main.humidity}%`} />
+                        <DetailCard icon={<Thermometer className="text-orange-400" />} label="Feels Like" value={`${convertTemp(main.feels_like)}°`} />
+                        <DetailCard icon={<Calendar className="text-purple-400" />} label="Pressure" value={`${main.pressure} hPa`} />
+                    </div>
+                    
+                    <SunriseSunset sunrise={sys.sunrise} sunset={sys.sunset} />
                 </div>
             </div>
         </div>
