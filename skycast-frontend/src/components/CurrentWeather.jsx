@@ -1,8 +1,11 @@
 import { MapPin, Wind, Droplets, Thermometer, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import LazyImage from './LazyImage';
+import { useTemperatureUnit } from '../hooks/useTemperatureUnit';
 
 export default function CurrentWeather({ data }) {
+    const { convertTemp, getUnitSymbol } = useTemperatureUnit();
+    
     if (!data) return null;
 
     const { name, main, weather, wind, sys, dt } = data;
@@ -25,13 +28,13 @@ export default function CurrentWeather({ data }) {
 
                     <div className="flex items-center justify-center md:justify-start gap-4">
                         <span className="text-8xl md:text-9xl font-bold tracking-tighter text-white">
-                            {Math.round(main.temp)}°
+                            {convertTemp(main.temp)}°
                         </span>
                         <div className="flex flex-col gap-1">
-                            <span className="text-2xl text-gray-400">C</span>
+                            <span className="text-2xl text-gray-400">{getUnitSymbol().replace('°', '')}</span>
                             <div className="flex gap-2 text-sm">
-                                <span className="text-orange-400 font-medium">H: {Math.round(main.temp_max)}°</span>
-                                <span className="text-blue-400 font-medium">L: {Math.round(main.temp_min)}°</span>
+                                <span className="text-orange-400 font-medium">H: {convertTemp(main.temp_max)}°</span>
+                                <span className="text-blue-400 font-medium">L: {convertTemp(main.temp_min)}°</span>
                             </div>
                         </div>
                     </div>
@@ -55,7 +58,7 @@ export default function CurrentWeather({ data }) {
                 <div className="grid grid-cols-2 gap-4 w-full md:w-72">
                     <DetailCard icon={<Wind className="text-sky-400" />} label="Wind" value={`${wind.speed} m/s`} />
                     <DetailCard icon={<Droplets className="text-blue-400" />} label="Humidity" value={`${main.humidity}%`} />
-                    <DetailCard icon={<Thermometer className="text-orange-400" />} label="Feels Like" value={`${Math.round(main.feels_like)}°`} />
+                    <DetailCard icon={<Thermometer className="text-orange-400" />} label="Feels Like" value={`${convertTemp(main.feels_like)}°`} />
                     <DetailCard icon={<Calendar className="text-purple-400" />} label="Pressure" value={`${main.pressure} hPa`} />
                 </div>
             </div>

@@ -1,6 +1,9 @@
 import { format } from 'date-fns';
+import { useTemperatureUnit } from '../hooks/useTemperatureUnit';
 
 export default function ForecastRow({ forecast }) {
+    const { convertTemp } = useTemperatureUnit();
+    
     if (!forecast || forecast.length === 0) return null;
 
     return (
@@ -11,14 +14,14 @@ export default function ForecastRow({ forecast }) {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 px-2">
                 {forecast.map((day, idx) => (
-                    <ForecastCard key={day.date} day={day} index={idx} />
+                    <ForecastCard key={day.date} day={day} index={idx} convertTemp={convertTemp} />
                 ))}
             </div>
         </div>
     );
 }
 
-function ForecastCard({ day, index }) {
+function ForecastCard({ day, index, convertTemp }) {
     const date = new Date(day.dt * 1000);
     const iconUrl = `https://openweathermap.org/img/wn/${day.icon}@2x.png`;
 
@@ -33,10 +36,10 @@ function ForecastCard({ day, index }) {
             <img src={iconUrl} alt={day.description} className="w-16 h-16 mb-4 drop-shadow-lg" />
             <div className="flex flex-col gap-1">
                 <span className="text-2xl font-bold text-white leading-none">
-                    {Math.round(day.temp_max)}°
+                    {convertTemp(day.temp_max)}°
                 </span>
                 <span className="text-sm text-gray-400">
-                    {Math.round(day.temp_min)}°
+                    {convertTemp(day.temp_min)}°
                 </span>
             </div>
             <span className="mt-4 text-xs text-sky-300 font-medium capitalize truncate w-full">

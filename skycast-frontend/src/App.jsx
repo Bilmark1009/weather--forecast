@@ -10,11 +10,13 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { LoadingSkeleton, ErrorMessage } from './components/States';
 import { useWeather } from './hooks/useWeather';
 import { useFavorites } from './hooks/useFavorites';
-import { Star, MessageSquare } from 'lucide-react';
+import { useTemperatureUnit } from './hooks/useTemperatureUnit';
+import { Star, MessageSquare, Thermometer } from 'lucide-react';
 
 function App() {
   const { current, forecast, loading, error, fetchWeather } = useWeather();
   const { toggleFavorite, isFavorite } = useFavorites();
+  const { toggleUnit, getUnitSymbol } = useTemperatureUnit();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isFeedbackOpen, setFeedbackOpen] = useState(false);
 
@@ -44,6 +46,14 @@ function App() {
         </div>
 
         <div className="flex items-center gap-4">
+          <button
+            onClick={toggleUnit}
+            className="flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-xl transition-all text-gray-300 hover:text-white"
+            title="Toggle temperature unit"
+          >
+            <Thermometer size={20} />
+            <span className="hidden md:inline font-medium">{getUnitSymbol()}</span>
+          </button>
           <button
             onClick={() => setFeedbackOpen(true)}
             className="flex items-center gap-2 px-4 py-2 hover:bg-white/10 rounded-xl transition-all text-gray-300 hover:text-white"
