@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { Search, MapPin, Star, Loader2, Clock, X } from 'lucide-react';
+import { Search, MapPin, Star, Loader2, Clock, X, Navigation } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { useRecentSearches } from '../hooks/useRecentSearches';
+import { useGeolocation } from '../hooks/useGeolocation';
 
 function cn(...inputs) {
     return twMerge(clsx(inputs));
@@ -12,6 +13,26 @@ export default function SearchBar({ onSearch, isLoading }) {
     const [query, setQuery] = useState('');
     const [showRecent, setShowRecent] = useState(false);
     const { recentSearches, addRecentSearch, removeRecentSearch, clearRecentSearches } = useRecentSearches();
+    const { getCurrentPosition, reverseGeocode, isLoading: locationLoading, error: locationError, isSupported } = useGeolocation();
+
+    const handleLocationSearch = async () => {
+        try {
+            const position = await getCurrentPosition();
+            const location = await reverseGeocode(position.lat, position.lon);
+            
+            if (location && location.displayName) {
+                addRecentSearch(location.displayName);
+                onSearch(location.displayName);
+                setShowRecent(false);
+            }
+        } catch (error) {
+            console.error('Location search error:', error);
+            if (locationError) {
+                console.error('Geolocation error:', locationError);
+            }
+            // You could show a toast notification here
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -72,31 +93,53 @@ export default function SearchBar({ onSearch, isLoading }) {
                     onBlur={handleBlur}
                     placeholder="Search for a city (e.g. Tokyo, London)..."
                     className={cn(
-                        "block w-full pl-12 pr-4 py-4 glass-card border border-white/20 rounded-2xl shadow-xl",
+                        "block w-full pl-12 pr-24 py-4 glass-card border border-white/20 rounded-2xl shadow-xl",
                         "text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-sky-400/50 focus:bg-white/20",
                         "backdrop-blur-md transition-all duration-300 hover:border-white/30",
                         isLoading && "opacity-50 cursor-not-allowed"
                     )}
                     disabled={isLoading}
                 />
-                <button
-                    type="submit"
-                    disabled={isLoading || !query.trim()}
-                    className={cn(
-                        "absolute right-2.5 bottom-2.5 px-6 py-1.5 btn-primary rounded-xl",
-                        "text-white font-medium shadow-lg transition-all active:scale-95 disabled:opacity-50",
-                        "disabled:cursor-not-allowed disabled:active:scale-100 flex items-center gap-2"
+                <div className="absolute right-2.5 bottom-2.5 flex items-center gap-2">
+                    {isSupported && (
+                        <button
+                            type="button"
+                            onClick={handleLocationSearch}
+                            disabled={locationLoading || isLoading}
+                            className={cn(
+                                "p-2.5 glass-card border border-white/20 rounded-xl",
+                                "text-white/70 hover:text-white hover:bg-white/10 transition-all",
+                                "disabled:opacity-50 disabled:cursor-not-allowed",
+                                locationLoading && "animate-pulse"
+                            )}
+                            title="Use my current location"
+                        >
+                            {locationLoading ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                                <Navigation className="h-4 w-4" />
+                            )}
+                        </button>
                     )}
-                >
-                    {isLoading ? (
-                        <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                            Loading...
-                        </>
-                    ) : (
-                        'Search'
-                    )}
-                </button>
+                    <button
+                        type="submit"
+                        disabled={isLoading || !query.trim()}
+                        className={cn(
+                            "px-6 py-2.5 btn-primary rounded-xl",
+                            "text-white font-medium shadow-lg transition-all active:scale-95 disabled:opacity-50",
+                            "disabled:cursor-not-allowed disabled:active:scale-100 flex items-center gap-2"
+                        )}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                Loading...
+                            </>
+                        ) : (
+                            'Search'
+                        )}
+                    </button>
+                </div>
             </form>
 
             {/* Recent Searches Dropdown */}

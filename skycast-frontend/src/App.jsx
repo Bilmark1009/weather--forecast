@@ -12,19 +12,38 @@ import { LoadingSkeleton, ErrorMessage } from './components/States';
 import { useWeather } from './hooks/useWeather';
 import { useFavorites } from './hooks/useFavorites';
 import { useTemperatureUnit } from './hooks/useTemperatureUnit';
+import { useGeolocation } from './hooks/useGeolocation';
 import { Star, MessageSquare, Thermometer } from 'lucide-react';
 
 function App() {
   const { current, forecast, loading, error, fetchWeather } = useWeather();
   const { toggleFavorite, isFavorite } = useFavorites();
   const { toggleUnit, getUnitSymbol } = useTemperatureUnit();
+  const { getCurrentPosition, reverseGeocode } = useGeolocation();
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const [isFeedbackOpen, setFeedbackOpen] = useState(false);
 
-  // Initialize with a default city or from geolocation
+  // Initialize with geolocation or fallback to London
   useEffect(() => {
-    fetchWeather('London');
-  }, [fetchWeather]);
+    const initializeLocation = async () => {
+      try {
+        const position = await getCurrentPosition();
+        const location = await reverseGeocode(position.lat, position.lon);
+        
+        if (location && location.displayName) {
+          fetchWeather(location.displayName);
+        } else {
+          fetchWeather('London');
+        }
+      } catch (error) {
+        // Fallback to London if geolocation fails
+        console.log('Geolocation initialization failed:', error);
+        fetchWeather('London');
+      }
+    };
+
+    initializeLocation();
+  }, [fetchWeather, getCurrentPosition, reverseGeocode]);
 
   const handleFavoriteClick = async () => {
     if (current) {
