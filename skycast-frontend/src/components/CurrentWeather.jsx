@@ -2,6 +2,7 @@ import { MapPin, Wind, Droplets, Thermometer, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import LazyImage from './LazyImage';
 import SunriseSunset from './SunriseSunset';
+import WindDirection from './WindDirection';
 import { useTemperatureUnit } from '../hooks/useTemperatureUnit';
 
 export default function CurrentWeather({ data }) {
@@ -64,6 +65,7 @@ export default function CurrentWeather({ data }) {
                         <DetailCard icon={<Calendar className="text-purple-400" />} label="Pressure" value={`${main.pressure} hPa`} />
                     </div>
                     
+                    <WindDirection windSpeed={wind.speed} windDeg={wind.deg} />
                     <SunriseSunset sunrise={sys.sunrise} sunset={sys.sunset} />
                 </div>
             </div>
