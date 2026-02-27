@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import LazyImage from './LazyImage';
 import SunriseSunset from './SunriseSunset';
 import WindDirection from './WindDirection';
+import UVIndex from './UVIndex';
 import { useTemperatureUnit } from '../hooks/useTemperatureUnit';
 
 export default function CurrentWeather({ data }) {
@@ -66,6 +67,7 @@ export default function CurrentWeather({ data }) {
                     </div>
                     
                     <WindDirection windSpeed={wind.speed} windDeg={wind.deg} />
+                    <UVIndex uvi={data.uvi} />
                     <SunriseSunset sunrise={sys.sunrise} sunset={sys.sunset} />
                 </div>
             </div>

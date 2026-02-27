@@ -36,6 +36,7 @@ class WeatherController extends Controller
                 'q' => $city,
                 'appid' => $config['key'],
                 'units' => $config['units'],
+                'uvi' => '1', // Include UV index data
             ]);
 
             $isError = $response->failed();
