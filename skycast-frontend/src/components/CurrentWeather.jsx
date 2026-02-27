@@ -4,6 +4,7 @@ import LazyImage from './LazyImage';
 import SunriseSunset from './SunriseSunset';
 import WindDirection from './WindDirection';
 import UVIndex from './UVIndex';
+import Visibility from './Visibility';
 import { useTemperatureUnit } from '../hooks/useTemperatureUnit';
 
 export default function CurrentWeather({ data }) {
@@ -68,6 +69,7 @@ export default function CurrentWeather({ data }) {
                     
                     <WindDirection windSpeed={wind.speed} windDeg={wind.deg} />
                     <UVIndex uvi={data.uvi} />
+                    <Visibility visibility={data.visibility} />
                     <SunriseSunset sunrise={sys.sunrise} sunset={sys.sunset} />
                 </div>
             </div>
