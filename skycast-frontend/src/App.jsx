@@ -7,6 +7,7 @@ import FeaturedCities from './components/FeaturedCities';
 import FavoritesSidebar from './components/FavoritesSidebar';
 import FeedbackModal from './components/FeedbackModal';
 import WeatherAlerts from './components/WeatherAlerts';
+import WeatherAnimations from './components/WeatherAnimations';
 import ErrorBoundary from './components/ErrorBoundary';
 import { LoadingSkeleton, ErrorMessage } from './components/States';
 import { useWeather } from './hooks/useWeather';
@@ -56,7 +57,10 @@ function App() {
   return (
     <ErrorBoundary>
       <div className={`min-h-screen transition-colors duration-1000 ${bgClass} text-white selection:bg-sky-500/30`}>
-      {/* Navigation / Header */}
+        {/* Weather Animations */}
+        <WeatherAnimations condition={current?.weather?.[0]?.main} />
+        
+        {/* Navigation / Header */}
       <header className="p-4 md:p-8 flex items-center justify-between max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 bg-sky-500 rounded-xl flex items-center justify-center shadow-lg shadow-sky-500/20">
